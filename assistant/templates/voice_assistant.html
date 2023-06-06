@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Assistant</title>
+</head>
+<body>
+    <h1>Voice Assistant</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="user_input">User Input:</label>
+        <input type="text" id="user_input" name="user_input">
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if response_audio %}
+        <audio src="{{response_audio}}" controls autoplay unmuted></audio>
+    {% endif %}
+    
+    {% if response_text %}
+        <p>{{ response_text }}</p>
+    {% endif %}
+</body>
+</html>
