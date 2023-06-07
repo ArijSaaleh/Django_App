@@ -28,7 +28,8 @@
             <h1>SIMPLE AI BOT</h1>
             <p>Esprit dedicated assistant</p>
             <div class="img">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgJGnZMXqPS9nq-6_hjZnWex1FGIPYKpidrg&usqp=CAU" />
+                <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgJGnZMXqPS9nq-6_hjZnWex1FGIPYKpidrg&usqp=CAU" />
             </div>
             <div class="form">
                 <form method="post">
@@ -42,7 +43,7 @@
                 <div class="response">
                     <div class="avatar">
                         <img id="avatar-image" src="avatar.jpg" alt="Avatar">
-                        <p id="spoken-words"></p>
+                        <p id="spoken-words">{{ response_text }}</p>
                     </div>
                     <div class="audio-wave"></div>
                 </div>
@@ -60,38 +61,37 @@
         </div>
     </section>
 
-   <script>
-    // Get the necessary elements
-    const avatarImage = document.getElementById('avatar-image');
-    const spokenWords = document.getElementById('spoken-words');
-    const form = document.querySelector('form');
-
-    // Add event listener to the form submit event
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const userInput = document.getElementById('user_input').value;
-
-        // Update the spoken words
-        spokenWords.textContent = userInput;
-
-        // Play audio and animate the wave
-        const audio = new Audio('{{ response_audio }}');
-        audio.play();
-        animateWave();
-
-        // Reset the form input
-        document.getElementById('user_input').value = '';
-    });
-
-    // Function to animate the wave
-    function animateWave() {
-        const wave = document.querySelector('.audio-wave');
-        wave.style.animation = 'none';
-        void wave.offsetWidth; // Trigger reflow to restart the animation
-        wave.style.animation = 'audio-wave-animation 2s linear infinite';
-    }
-</script>
-
+    <script>
+        // Get the necessary elements
+        const avatarImage = document.getElementById('avatar-image');
+        const form = document.querySelector('form');
+    
+        // Add event listener to the form submit event
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userInput = document.getElementById('user_input').value;
+    
+            // Update the spoken words
+            const spokenWords = document.querySelector('#spoken-words');
+            spokenWords.textContent = userInput;
+    
+            // Play audio and animate the wave
+            const audio = new Audio('/static/audio/response_audio.wav');
+            audio.play();
+            animateWave();
+    
+            // Reset the form input
+            document.getElementById('user_input').value = '';
+        });
+    
+        // Function to animate the wave
+        function animateWave() {
+            const wave = document.querySelector('.audio-wave');
+            wave.style.animation = 'none';
+            void wave.offsetWidth; // Trigger reflow to restart the animation
+            wave.style.animation = 'audio-wave-animation 2s linear infinite';
+        }
+    </script>
 </body>
 
 </html>
