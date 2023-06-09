@@ -2,22 +2,44 @@
 <html>
 <head>
     <title>Voice Assistant</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <h1>Voice Assistant</h1>
-    <form method="post">
+    <form id="assistantForm">
         {% csrf_token %}
         <label for="user_input">User Input:</label>
         <input type="text" id="user_input" name="user_input">
         <button type="submit">Submit</button>
     </form>
 
-    {% if response_audio %}
-        <audio src="{{response_audio}}" controls autoplay unmuted></audio>
-    {% endif %}
-    
-    {% if response_text %}
-        <p>{{ response_text }}</p>
-    {% endif %}
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        $(document).ready(function() {
+            $("#assistantForm").on("submit", function(event) {
+                event.preventDefault();
+                var userInput = $("#user_input").val();
+                
+                $.ajax({
+                    url: "/assistant/",
+                    method: "POST",
+                    data: {
+                        user_input: userInput,
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    },
+                    success: function(response) {
+                        // Handle the response
+                        var audioUrl = "data:audio/wav;base64," + response.audio_data;
+                        $("#audioPlayer").attr("src", audioUrl);
+                        $("#audioPlayer")[0].play();
+                    },
+                    error: function() {
+                        console.log("Error occurred during AJAX request");
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
