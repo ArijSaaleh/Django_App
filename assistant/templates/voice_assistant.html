@@ -2,44 +2,57 @@
 <html>
 <head>
     <title>Voice Assistant</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    {% block css %}
+    {% load static %}
+
+    <link href="{% static 'style.css' %}" rel="stylesheet" />
+    {% endblock css %}
 </head>
 <body>
-    <h1>Voice Assistant</h1>
-    <form id="assistantForm">
-        {% csrf_token %}
-        <label for="user_input">User Input:</label>
-        <input type="text" id="user_input" name="user_input">
-        <button type="submit">Submit</button>
-    </form>
-
-    <audio id="audioPlayer"></audio>
-
-    <script>
-        $(document).ready(function() {
-            $("#assistantForm").on("submit", function(event) {
-                event.preventDefault();
-                var userInput = $("#user_input").val();
-                
-                $.ajax({
-                    url: "/assistant/",
-                    method: "POST",
-                    data: {
-                        user_input: userInput,
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    },
-                    success: function(response) {
-                        // Handle the response
-                        var audioUrl = "data:audio/wav;base64," + response.audio_data;
-                        $("#audioPlayer").attr("src", audioUrl);
-                        $("#audioPlayer")[0].play();
-                    },
-                    error: function() {
-                        console.log("Error occurred during AJAX request");
-                    }
-                });
-            });
-        });
-    </script>
+    <nav>
+        <div class="logo">
+        <h1>Arij</h1>
+        </div>
+        <ul>
+            <li>
+               <a href="">Home </a>
+            </li>
+            <li>
+                <a href="">About </a>
+            </li>
+        </ul>
+    </nav>
+    <section>
+        <div class="titles">
+        <h1>SIMPLE AI BOT</h1>
+        <p>Esprit dedicated assistant</p>
+        <div class="img">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgJGnZMXqPS9nq-6_hjZnWex1FGIPYKpidrg&usqp=CAU"/>
+        </div>
+        <div class="form">
+            <form method="post">
+                {% csrf_token %}
+                <label for="user_input">You said:</label>
+                <input type="text" id="user_input" name="user_input">
+                <button type="submit">send</button>
+            </form>
+        
+            {% if response_audio %}
+                <audio class="audio" autoplay>
+                    <source src="{{ response_audio }}" type="audio/wav">
+                </audio>
+            {% endif %}
+            
+            {% if response_text %}
+            <div class="response">
+                <p>{{ response_text }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+        
+</section>
 </body>
 </html>

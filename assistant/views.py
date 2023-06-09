@@ -65,3 +65,42 @@ def voice_assistant(request):
         request, "voice_assistant.html", 
         {"form": form}
     )
+def main(request):
+    output_file = "media/output.wav"
+    if request.method == "POST":
+        form = request.POST
+        text = form.get("user_input", "")
+        
+        response, fulfilment_text, confidence = nlp_processor.process_input(
+            text,project_id, session_id, language_code
+        )
+        if response is not None and response.query_result is not None:
+            fulfilment_text = response.query_result.fulfillment_text
+            confidence = response.query_result.intent_detection_confidence
+            # Generate audio file
+            #tts_converter.speak(response)
+            
+            # Save audio file
+            with open(output_file, "wb") as out:
+                out.write(response.output_audio)
+            
+            # Prepare response data
+            response_text = "Fulfillment text: {}\nConfidence: {}".format(
+                fulfilment_text, confidence
+            )
+        else:
+            response_text = "No valid response received from Dialogflow."
+        
+        # Render the template with response data
+        return render(
+            request, "main.html", 
+            {"form": form, "response_text": response_text, "response_audio": output_file}
+        )
+    else:
+        form = {}
+    
+    # Render the template with empty form
+    return render(
+        request, "main.html", 
+        {"form": form}
+    )

@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from assistant.views import voice_assistant
+from assistant.views import main
 
 urlpatterns = [
     path('', voice_assistant, name='home'),
