@@ -5,8 +5,11 @@
     <title>Voice Assistant</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
+    {% block css %}
     {% load static %}
     <link href="{% static 'style.css' %}" rel="stylesheet" />
+    {% endblock css %}
+
 </head>
 
 <body>
@@ -16,10 +19,10 @@
         </div>
         <ul>
             <li>
-                <a href="">Home</a>
+                <a href="">Home </a>
             </li>
             <li>
-                <a href="">About</a>
+                <a href="">About </a>
             </li>
         </ul>
     </nav>
@@ -36,63 +39,24 @@
                     {% csrf_token %}
                     <label for="user_input">You said:</label>
                     <input type="text" id="user_input" name="user_input">
-                    <button type="submit">Send</button>
+                    <button type="submit">send</button>
                 </form>
 
                 {% if response_audio %}
-                <div class="response">
-                    <div class="avatar">
-                        <img id="avatar-image" src="avatar.jpg" alt="Avatar">
-                        <p id="spoken-words">{{ response_text }}</p>
-                    </div>
-                    <div class="audio-wave"></div>
-                </div>
-                % endif %
-                {kkk}
+                <audio class="audio" autoplay>
+                    <source src="{{ response_audio }}" type="audio/wav">
+                </audio>
+                {% endif %}
 
                 {% if response_text %}
                 <div class="response">
-                    <div class="avatar">
-                        <img id="avatar-image" src="avatar.jpg" alt="Avatar">
-                        <p id="spoken-words">{{ response_text }}</p>
-                    </div>
+                    <p>{{ response_text }}</p>
                 </div>
                 {% endif %}
             </div>
         </div>
-    </section>
 
-    <script>
-        // Get the necessary elements
-        const avatarImage = document.getElementById('avatar-image');
-        const form = document.querySelector('form');
-    
-        // Add event listener to the form submit event
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const userInput = document.getElementById('user_input').value;
-    
-            // Update the spoken words
-            const spokenWords = document.querySelector('#spoken-words');
-            spokenWords.textContent = userInput;
-    
-            // Play audio and animate the wave
-            const audio = new Audio('/static/audio/response_audio.wav');
-            audio.play();
-            animateWave();
-    
-            // Reset the form input
-            document.getElementById('user_input').value = '';
-        });
-    
-        // Function to animate the wave
-        function animateWave() {
-            const wave = document.querySelector('.audio-wave');
-            wave.style.animation = 'none';
-            void wave.offsetWidth; // Trigger reflow to restart the animation
-            wave.style.animation = 'audio-wave-animation 2s linear infinite';
-        }
-    </script>
+    </section>
 </body>
 
 </html>

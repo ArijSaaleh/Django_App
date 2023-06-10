@@ -47,10 +47,7 @@ def voice_assistant(request):
                 out.write(response.output_audio)
 
             # Prepare response data
-            """response_text = "Fulfillment text: {}\nConfidence: {}".format(
-                fulfilment_text, confidence
-            )"""
-            response_text =str(fulfilment_text)
+            response_text = fulfilment_text
         else:
             response_text = "No valid response received from Dialogflow."
 
@@ -61,7 +58,7 @@ def voice_assistant(request):
             {
                 "form": form,
                 "response_text": response_text,
-                "response_audio": output_file,
+                "response_audio": "/" + output_file,
             },
         )
     else:
